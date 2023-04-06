@@ -6,13 +6,13 @@ import os
 API_KEY = 'AQVNyVN0YIKksLUj_8KZ-XJ-S9Cl-6xv8LLQYTs0'
 
 
-def synthesize(text):
+def create(task):
     url = 'https://tts.api.cloud.yandex.net/speech/v1/tts:synthesize'
     headers = {
         'Authorization': f'Api-Key {API_KEY}',
     }
     data = {
-        'text': text,
+        'text': task.text,
         'lang': 'ru-RU',
         'voice': 'alena',
         'speed': '1.0',
@@ -24,5 +24,3 @@ def synthesize(text):
             f.write(chunk)
 
 
-text = 'Привет, мир! Это тестовое сообщение от пользователя Олега!'
-synthesize(text)

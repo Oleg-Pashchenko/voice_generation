@@ -23,4 +23,4 @@ def text_to_wav(voice_name: str, text: str):
         out.write(response.audio_content)
         print(f'Generated speech saved to "{filename}"')
 
-print(text_to_wav('test', 'как дела'))
+#print(text_to_wav('test', 'как дела'))
