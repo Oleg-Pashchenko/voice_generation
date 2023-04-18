@@ -17,6 +17,9 @@ class GoogleSheetInformation:
 class SecretInformation:
     GOOGLE_SHEET: GoogleSheetInformation
     ZVUKOGRAM_API_KEY: str
+    YANDEX_API_KEY: str
+    AZURE_API_KEY: str
+
 
 
 load_dotenv()
@@ -26,5 +29,7 @@ secret_info = SecretInformation(
         os.getenv('GOOGLE_SPREADSHEET_ID'),
         os.getenv('GOOGLE_SHEET_NAME')
     ),
-    ZVUKOGRAM_API_KEY=os.getenv('ZVUKOGRAM_API_KEY')
+    ZVUKOGRAM_API_KEY=os.getenv('ZVUKOGRAM_API_KEY'),
+    YANDEX_API_KEY=os.getenv('YANDEX_SECRET_KEY'),
+    AZURE_API_KEY=os.getenv('AZURE_SECRET_KEY')
 )

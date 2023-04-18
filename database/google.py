@@ -39,7 +39,7 @@ def get_navigation_settings(table_dict):
     return response
 
 
-def get_creation_task(s, table, x):
+def get_creation_task(s, table, x) -> CreationTask:
     if True:
         video_name_source = table[int(s['Video_source']) - 1][x]
         video_name = table[int(s['Final_video']) - 1][x]

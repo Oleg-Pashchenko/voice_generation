@@ -5,6 +5,8 @@ from database.google import write_stats
 from database.models import CreationTask
 from pydub import AudioSegment
 
+from misc.Event import event
+
 
 def get_filenames(name):
     filenames = os.listdir('temp/')
@@ -49,15 +51,18 @@ def choose_etalon(tasks):
     result = []
     etalon = []
     for task in tasks:
-        length, file_by_file_info, r = get_language_length(task.audio_name)
-        result.append([length, file_by_file_info, task.audio_name])
-        if len(etalon) == 0:
-            etalon = list(r)
-            continue
         try:
-            for i in range(len(etalon)):
-                if etalon[i] < r[i]:
-                    etalon[i] = r[i]
+            length, file_by_file_info, r = get_language_length(task.audio_name)
+            result.append([length, file_by_file_info, task.audio_name])
+            if len(etalon) == 0:
+                etalon = list(r)
+                continue
+            try:
+                for i in range(len(etalon)):
+                    if etalon[i] < r[i]:
+                        etalon[i] = r[i]
+            except:
+                pass
         except:
             pass
 
@@ -71,6 +76,7 @@ def sort_key_func(s):
 def concatenate_files(result, timings):
     c = 0
     for voice in result:
+        event.set()
         index = -1
         c += 1
         combined_sound = AudioSegment.silent(duration=0)

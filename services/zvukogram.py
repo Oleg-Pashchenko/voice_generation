@@ -1,32 +1,29 @@
 import os
 import time
 
-from database.models import CreationTask
+from database.models import CreationTask, RequestData
 from misc.secrets import secret_info
 import requests
 from multiprocessing import Pool
 
 
 
-def f(task):
+def create(rd: RequestData):
     try:
-        text = task[1]
-        index = task[2]
-        task =  task[0]
-        if task.voice.emotion not in ['good', 'evil', 'neutral']:
-            task.voice.emotion = 'good'
+        if rd.task.voice.emotion not in ['good', 'evil', 'neutral']:
+            rd.task.voice.emotion = 'good'
         email = 'distribution@guru.markets'
         response = requests.post(
             url='https://zvukogram.com/index.php?r=api/longtext',
             data={
                 'token': secret_info.ZVUKOGRAM_API_KEY,
                 'email': email,
-                'voice': task.voice.speaker,
-                'text': text,
+                'voice': rd.task.voice.speaker,
+                'text': rd.text,
                 'format': 'mp3',
-                'speed': task.voice.speed,
-                'pitch': task.voice.tone,
-                'emotion': task.voice.emotion
+                'speed': rd.task.voice.speed,
+                'pitch': rd.task.voice.tone,
+                'emotion': rd.task.voice.emotion
             }
         ).json()
 
@@ -41,7 +38,7 @@ def f(task):
             ).json()
             if response2['status'] == '1':
                 doc = requests.get(response2['file'])
-                with open(f'temp/{index}_part_{task.audio_name}', 'wb') as f:  # TODO: auto create dir
+                with open(f'temp/{rd.index}_part_{rd.task.audio_name}', 'wb') as f:
                     f.write(doc.content)
                 break
             elif response2['status'] != '0':
@@ -49,14 +46,4 @@ def f(task):
             time.sleep(3)
     except Exception as e:
         print("Exception:", e)
-
-def create(t: CreationTask):
-    print("Обработка Zvukogram.")
-    arr = []
-    count = 0
-    for i in t.text:
-        count += 1
-        arr.append([t, i, count])
-    with Pool(len(arr)) as p:
-        p.map(f, arr)
 

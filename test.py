@@ -1,26 +1,49 @@
 import os
+import time
 
-from mutagen.mp3 import MP3
-
-
-def get_filenames(name):
-    filenames = os.listdir('res/')
-    res = []
-    for filename in filenames:
-        if name in filename:
-            res.append(filename)
-    res.sort()
-    return res
-
-def show_length():
-    filenames = get_filenames('.mp3')
-    response = []
-    for filename in filenames:
-        audio = MP3(f"res/{filename}")
-        length_in_seconds = audio.info.length
-        response.append([length_in_seconds, filename])
-    response.sort()
-    print(*response, sep='\n')
+from database.models import CreationTask, RequestData
+from misc.secrets import secret_info
+import requests
+from multiprocessing import Pool
 
 
-show_length()
+
+def create(text):
+    try:
+        if rd.task.voice.emotion not in ['good', 'evil', 'neutral']:
+            rd.task.voice.emotion = 'good'
+        email = 'distribution@guru.markets'
+        response = requests.post(
+            url='https://zvukogram.com/index.php?r=api/longtext',
+            data={
+                'token': secret_info.ZVUKOGRAM_API_KEY,
+                'email': email,
+                'voice': rd.task.voice.speaker,
+                'text': rd.text,
+                'format': 'mp3',
+                'speed': rd.task.voice.speed,
+                'pitch': rd.task.voice.tone,
+                'emotion': rd.task.voice.emotion
+            }
+        ).json()
+
+        while True:
+            response2 = requests.post(
+                url='https://zvukogram.com/index.php?r=api/result',
+                data={
+                    'token': secret_info.ZVUKOGRAM_API_KEY,
+                    'email': email,
+                    'id': response['id']
+                }
+            ).json()
+            if response2['status'] == '1':
+                doc = requests.get(response2['file'])
+                with open(f'temp/{rd.index}_part_{rd.task.audio_name}', 'wb') as f:
+                    f.write(doc.content)
+                break
+            elif response2['status'] != '0':
+                break
+            time.sleep(3)
+    except Exception as e:
+        print("Exception:", e)
+

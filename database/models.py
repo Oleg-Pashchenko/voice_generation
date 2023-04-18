@@ -22,3 +22,9 @@ class CreationTask:
     correction_of_pauses_in_the_voice: int
     pauses_between_segments: int
 
+
+@dataclasses.dataclass
+class RequestData:
+    index: int
+    text: str
+    task: CreationTask
