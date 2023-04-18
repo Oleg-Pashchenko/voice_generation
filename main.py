@@ -48,10 +48,8 @@ def get_status_texts() -> list[str]:
     tasks: list[CreationTask] = db.get_tasks()
     response = []
     for index, task in enumerate(tasks):
-        response.append(f"[{len(response) + 1} / {len(tasks) * 2}] Загрузка дорожки {task.voice.language}")
-
-    for index, task in enumerate(tasks):
-        response.append(f"[{len(response) + 1} / {len(tasks) * 2}] Обработка дорожки {task.voice.language}")
+        response.append(f"[{len(response) + 1} / {len(tasks)}] Загрузка дорожки {task.voice.language}")
+    response.append(f'Обработка дорожек')
     return response
 
 

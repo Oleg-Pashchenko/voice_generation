@@ -7,7 +7,7 @@ from misc.secrets import secret_info
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = secret_info.GOOGLE_SHEET.GOOGLE_AUTH_FILE_NAME
 
 
-def text_to_wav(rd: RequestData):
+def create(rd: RequestData):
     text_input = tts.SynthesisInput(text=rd.text)
     voice_params = tts.VoiceSelectionParams(
         language_code=rd.task.voice.language,

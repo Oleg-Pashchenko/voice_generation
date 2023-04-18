@@ -52,7 +52,7 @@ class Section1(tk.Frame):
         for data1, data2 in data:
             row_frame = tk.Frame(self.master)  # Создаем отдельный фрейм для каждой строки
             row_frame.pack()
-            row_label0 = tk.Label(row_frame, text='-', relief=tk.SUNKEN, width=5)
+            row_label0 = tk.Label(row_frame, text='+', relief=tk.SUNKEN, width=5)
             row_label0.pack(side=tk.LEFT)
             row_label1 = tk.Label(row_frame, text=data1, relief=tk.SUNKEN, width=25, anchor='w')
             row_label1.pack(side=tk.LEFT)
